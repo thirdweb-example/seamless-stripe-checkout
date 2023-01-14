@@ -7,12 +7,12 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { address } = req.body;
 
-  const amount = 100_000;
+  const amount = 10000;
 
   try {
     const payment_intent = await stripe.paymentIntents.create({
       amount: amount,
-      currency: "inr",
+      currency: "usd",
       description: "Payment description",
       automatic_payment_methods: {
         enabled: true,

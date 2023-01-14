@@ -38,10 +38,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     const data = JSON.parse(String(buf));
 
-    if (event.type === "payment_intent.created") {
-      console.log(`PaymentIntent was created for: ${data.data.object.amount}`);
-    }
-
     if (event.type === "payment_intent.succeeded") {
       const paymentMethod = event.data.object as any;
       const address = paymentMethod.metadata.address;

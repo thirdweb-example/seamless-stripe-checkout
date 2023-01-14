@@ -1,5 +1,9 @@
 import { Elements } from "@stripe/react-stripe-js";
-import { loadStripe, StripeElementsOptions } from "@stripe/stripe-js";
+import {
+  Appearance,
+  loadStripe,
+  StripeElementsOptions,
+} from "@stripe/stripe-js";
 import {
   ThirdwebNftMedia,
   useAddress,
@@ -13,21 +17,31 @@ import Form from "../components/Form";
 import { EDITION_ADDRESS } from "../constants/addresses";
 import styles from "../styles/Home.module.css";
 
-const stripe = loadStripe(
-  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
-);
-
 const Home: NextPage = () => {
   const address = useAddress();
   const connectWithMagic = useMagic();
   const [email, setEmail] = useState<string>("");
-  const [clientSecret, setClientSecret] = useState("");
   const { contract } = useContract(EDITION_ADDRESS, "edition");
   const { data: nft } = useNFT(contract, 0);
+  const [clientSecret, setClientSecret] = useState("");
+
+  const stripe = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY as string
+  );
+
+  const appearance: Appearance = {
+    theme: "night",
+    labels: "above",
+  };
+
+  const options: StripeElementsOptions = {
+    clientSecret,
+    appearance,
+  };
 
   useEffect(() => {
     if (address) {
-      fetch("api/stripe_intent", {
+      fetch("/api/stripe_intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -40,16 +54,6 @@ const Home: NextPage = () => {
         });
     }
   }, [address]);
-
-  const appearance = {
-    theme: "stripe" as "stripe" | "night" | "flat" | "none" | undefined,
-    labels: "floating" as "floating" | "above" | undefined,
-  };
-
-  const options: StripeElementsOptions = {
-    clientSecret,
-    appearance,
-  };
 
   return (
     <div className={styles.container}>
@@ -65,7 +69,7 @@ const Home: NextPage = () => {
             )}
             <h2>{nft?.metadata?.name}</h2>
             <p>{nft?.metadata?.description}</p>
-            <p>Price: 1000 inr</p>
+            <p>Price: 100$</p>
           </div>
           {clientSecret && (
             <Elements options={options} stripe={stripe}>

@@ -5,16 +5,14 @@ import {
 } from "@stripe/react-stripe-js";
 import styles from "../styles/Home.module.css";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import { EDITION_ADDRESS } from "../constants/addresses";
 
-export default function Form() {
+const Form = () => {
+  const elements = useElements();
+  const stripe = useStripe();
+  const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<null | string | undefined>(null);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const stripe = useStripe();
-  const elements = useElements();
-  const router = useRouter();
 
   useEffect(() => {
     if (!stripe) {
@@ -46,7 +44,7 @@ export default function Form() {
           break;
       }
     });
-  }, [router, stripe]);
+  }, [stripe]);
 
   const URL = process.env.NEXT_PUBLIC_DOMAIN || "http://localhost:3000";
 
@@ -97,13 +95,13 @@ export default function Form() {
           <button
             className={`${styles.mainButton} ${styles.payButton}`}
             disabled={isLoading || !stripe || !elements}
-            id="submit"
           >
-            <span id="button-text">{isLoading ? "Loading..." : "Pay now"}</span>
+            <span>{isLoading ? "Loading..." : "Pay now"}</span>
           </button>
-          {message && <div>{message}</div>}
         </form>
       )}
     </>
   );
-}
+};
+
+export default Form;
