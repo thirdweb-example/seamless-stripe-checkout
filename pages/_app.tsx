@@ -1,4 +1,4 @@
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { MagicConnector } from "@thirdweb-dev/react/evm/connectors/magic";
 import type { AppProps } from "next/app";
 import "../styles/globals.css";
